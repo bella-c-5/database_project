@@ -6,5 +6,45 @@
     <title>SeenIt</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
-</html>
+<body>
 
+    <div class="container">
+        <h1 class="title">SeenIt</h1>
+
+        <div class="button-row">
+            <button class="btn" id="createBtn">Create Profile</button>
+            <button class="btn" id="enterBtn">Enter Existing Profile</button>
+        </div>
+
+        <!-- "Create Profile" pop up -->
+        <div id="createPopup" class="popup hidden">
+            <input type="text" placeholder="Enter New Profile Name" class="text-input">
+            <button class="create-submit">Create</button>
+        </div>
+
+        <!-- "Enter Existing Profile" pop up -->
+        <div id="enterPopup" class="popup hidden">
+            <input type="text" placeholder="Enter Profile Name" class="text-input">
+            <button class="create-submit">Enter</button>
+        </div>
+    </div>
+
+    <script>
+        const createBtn = document.getElementById("createBtn");
+        const enterBtn = document.getElementById("enterBtn");
+        const createPopup = document.getElementById("createPopup");
+        const enterPopup = document.getElementById("enterPopup");
+
+        createBtn.addEventListener("click", () => {
+            createPopup.classList.remove("hidden");
+            enterPopup.classList.add("hidden");
+        });
+
+        enterBtn.addEventListener("click", () => {
+            enterPopup.classList.remove("hidden");
+            createPopup.classList.add("hidden");
+        });
+    </script>
+
+</body>
+</html>
