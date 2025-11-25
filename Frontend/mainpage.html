@@ -18,14 +18,14 @@
 
         <!-- "Create Profile" pop up -->
         <div id="createPopup" class="popup hidden">
-            <input type="text" placeholder="Enter New Profile Name" class="text-input">
-            <button class="create-submit">Create</button>
+            <input type="text" placeholder="Enter New Profile Name" id="createUsername" class="text-input">
+            <button class="create-submit" id="createSubmit">Create</button>
         </div>
 
         <!-- "Enter Existing Profile" pop up -->
         <div id="enterPopup" class="popup hidden">
-            <input type="text" placeholder="Enter Profile Name" class="text-input">
-            <button class="create-submit">Enter</button>
+            <input type="text" placeholder="Enter Profile Name" id="enterUsername" class="text-input">
+            <button class="create-submit" id="enterSubmit">Enter</button>
         </div>
     </div>
 
@@ -43,6 +43,32 @@
         enterBtn.addEventListener("click", () => {
             enterPopup.classList.remove("hidden");
             createPopup.classList.add("hidden");
+        });
+
+        // connecting pages
+        const createSubmit = createPopup.querySelector(".create-submit");
+        const enterSubmit = enterPopup.querySelector(".create-submit");
+
+        // when "Create" is clicked
+        createSubmit.addEventListener("click", () => {
+            const username = createPopup.querySelector("input").value.trim();
+            if (!username) {
+                alert("Please enter a profile name.");
+                return;
+            }
+            localStorage.setItem("seenitUsername", username);
+            window.location.href = "mainpage2.html";  // takes user to second main page
+        });
+
+        // when "Enter" is clicked
+        enterSubmit.addEventListener("click", () => {
+            const username = enterPopup.querySelector("input").value.trim();
+            if (!username) {
+                alert("Please enter a profile name.");
+                return;
+            }
+            localStorage.setItem("seenitUsername", username);
+            window.location.href = "mainpage2.html";  // takes user to second main page
         });
     </script>
 

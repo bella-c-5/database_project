@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SeenIt</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="title">SeenIt</h1>
+
+        <div class="button-row">
+            <button class="btn" id="createBtn">Create Profile</button>
+            <button class="btn" id="enterBtn">Enter Existing Profile</button>
+        </div>
+
+        <!-- "Create Profile" pop up -->
+        <div class="popup hidden" id="createPopup">
+            <div class="popup-content">
+                <h2>Create Profile</h2>
+                <input
+                    type="text"
+                    id="createUsername"
+                    placeholder="Enter username"
+                    class="create-input"
+                />
+                <button class="create-submit" id="createSubmit">Create</button>
+            </div>
+        </div>
+
+        <!-- "Enter Existing Profile" pop up -->
+        <div class="popup hidden" id="enterPopup">
+            <div class="popup-content">
+                <h2>Enter Existing Profile</h2>
+                <input
+                    type="text"
+                    id="enterUsername"
+                    placeholder="Enter username"
+                    class="create-input"
+                />
+                <button class="create-submit" id="enterSubmit">Enter</button>
+            </div>
+        </div>
+    </div> <!-- end .container -->
+
+    <script>
+        const createBtn = document.getElementById("createBtn");
+        const enterBtn = document.getElementById("enterBtn");
+        const createPopup = document.getElementById("createPopup");
+        const enterPopup = document.getElementById("enterPopup");
+
+        // shows the correct popup
+        createBtn.addEventListener("click", () => {
+            createPopup.classList.remove("hidden");
+            enterPopup.classList.add("hidden");
+        });
+
+        enterBtn.addEventListener("click", () => {
+            enterPopup.classList.remove("hidden");
+            createPopup.classList.add("hidden");
+        });
+
+        // these are helpers to manage profile list in localStorage
+        function getProfiles() {
+            const raw = localStorage.getItem("seenitProfiles");
+            if (!raw) return [];
+            try {
+                return JSON.parse(raw);
+            } catch {
+                return [];
+            }
+        }
+
+        function saveProfiles(profiles) {
+            localStorage.setItem("seenitProfiles", JSON.stringify(profiles));
+        }
+
+        const createSubmit = document.getElementById("createSubmit");
+        const enterSubmit = document.getElementById("enterSubmit");
+
+        // creating profile
+        createSubmit.addEventListener("click", () => {
+            const username = document
+                .getElementById("createUsername")
+                .value
+                .trim();
+
+            if (!username) {
+                alert("Please enter a username.");
+                return;
+            }
+
+            let profiles = getProfiles();
+
+            // new username = add it to the profiles list
+            if (!profiles.includes(username)) {
+                profiles.push(username);
+                saveProfiles(profiles);
+            }
+
+            // sets current user and goes to movies page
+            localStorage.setItem("seenitUsername", username);
+            window.location.href = "movies2.html";
+        });
+
+        // enters existing profile
+        enterSubmit.addEventListener("click", () => {
+            const username = document
+                .getElementById("enterUsername")
+                .value
+                .trim();
+
+            if (!username) {
+                alert("Please enter a username.");
+                return;
+            }
+
+            const profiles = getProfiles();
+
+            if (!profiles.includes(username)) {
+                alert("Profile not found. Please create a profile first.");
+                return;
+            }
+
+            // Valid profile: sets current user and goes to movies page
+            localStorage.setItem("seenitUsername", username);
+            window.location.href = "movies2.html";
+        });
+    </script>
+
+
+</body>
+</html>

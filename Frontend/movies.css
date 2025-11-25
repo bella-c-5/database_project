@@ -15,7 +15,7 @@ a {
   color: #00ff3b;
 }
 
-/* Top bar --------------------------------------------------- */
+/* top bar */
 .top-bar {
   display: flex;
   align-items: center;
@@ -52,7 +52,7 @@ a {
   background: #000;
 }
 
-/* Search row ----------------------------------------------- */
+/* search row */
 .search-row {
   display: flex;
   align-items: center;
@@ -74,7 +74,7 @@ a {
   border-radius: 8px;
 }
 
-/* Main layout ---------------------------------------------- */
+/* main layout */
 .main {
   display: flex;
   gap: 20px;
@@ -111,7 +111,7 @@ a {
   cursor: pointer;
 }
 
-/* Movie list ----------------------------------------------- */
+/* movie list */
 #movieList {
   list-style: none;
 }
@@ -156,7 +156,7 @@ a {
   color: #000;
 }
 
-/* Filters -------------------------------------------------- */
+/* filters */
 .filter-title {
   font-size: 18px;
   font-weight: bold;
@@ -191,7 +191,7 @@ a {
   margin-right: 2px;
 }
 
-/* Modal ---------------------------------------------------- */
+/* modal */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -254,7 +254,7 @@ a {
   filter: brightness(1.1);
 }
 
-/* Scrollbars (optional) ----------------------------------- */
+/* scrollbars (optional) */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
