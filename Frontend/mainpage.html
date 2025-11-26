@@ -9,7 +9,7 @@
 <body>
 
     <div class="container">
-        <h1 class="title">SeenIt</h1>
+        <img src="seenit-logo.png" class="seenit-logo-main" alt="SeenIt logo" />
 
         <div class="button-row">
             <button class="btn" id="createBtn">Create Profile</button>
@@ -17,17 +17,33 @@
         </div>
 
         <!-- "Create Profile" pop up -->
-        <div id="createPopup" class="popup hidden">
-            <input type="text" placeholder="Enter New Profile Name" id="createUsername" class="text-input">
-            <button class="create-submit" id="createSubmit">Create</button>
+        <div class="popup hidden" id="createPopup">
+            <div class="popup-content">
+                <h2>Create Profile</h2>
+                <input
+                    type="text"
+                    id="createUsername"
+                    placeholder="Enter username"
+                    class="create-input"
+                />
+                <button class="create-submit" id="createSubmit">Create</button>
+            </div>
         </div>
 
         <!-- "Enter Existing Profile" pop up -->
-        <div id="enterPopup" class="popup hidden">
-            <input type="text" placeholder="Enter Profile Name" id="enterUsername" class="text-input">
-            <button class="create-submit" id="enterSubmit">Enter</button>
+        <div class="popup hidden" id="enterPopup">
+            <div class="popup-content">
+                <h2>Enter Existing Profile</h2>
+                <input
+                    type="text"
+                    id="enterUsername"
+                    placeholder="Enter username"
+                    class="create-input"
+                />
+                <button class="create-submit" id="enterSubmit">Enter</button>
+            </div>
         </div>
-    </div>
+    </div> 
 
     <script>
         const createBtn = document.getElementById("createBtn");
@@ -35,6 +51,7 @@
         const createPopup = document.getElementById("createPopup");
         const enterPopup = document.getElementById("enterPopup");
 
+        // show the correct popup
         createBtn.addEventListener("click", () => {
             createPopup.classList.remove("hidden");
             enterPopup.classList.add("hidden");
@@ -45,30 +62,71 @@
             createPopup.classList.add("hidden");
         });
 
-        // connecting pages
-        const createSubmit = createPopup.querySelector(".create-submit");
-        const enterSubmit = enterPopup.querySelector(".create-submit");
+        // helpers to manage profile list in localStorage
+        function getProfiles() {
+            const raw = localStorage.getItem("seenitProfiles");
+            if (!raw) return [];
+            try {
+                return JSON.parse(raw);
+            } catch {
+                return [];
+            }
+        }
 
-        // when "Create" is clicked
+        function saveProfiles(profiles) {
+            localStorage.setItem("seenitProfiles", JSON.stringify(profiles));
+        }
+
+        const createSubmit = document.getElementById("createSubmit");
+        const enterSubmit = document.getElementById("enterSubmit");
+
+        // creating profile
         createSubmit.addEventListener("click", () => {
-            const username = createPopup.querySelector("input").value.trim();
+            const username = document
+                .getElementById("createUsername")
+                .value
+                .trim();
+
             if (!username) {
-                alert("Please enter a profile name.");
+                alert("Please enter a username.");
                 return;
             }
+
+            let profiles = getProfiles();
+
+            // if new username, add it to the profiles list
+            if (!profiles.includes(username)) {
+                profiles.push(username);
+                saveProfiles(profiles);
+            }
+
+            // set current user and go to movies page
             localStorage.setItem("seenitUsername", username);
-            window.location.href = "mainpage2.html";  // takes user to second main page
+            window.location.href = "movies.html";
         });
 
-        // when "Enter" is clicked
+        // existing profile
         enterSubmit.addEventListener("click", () => {
-            const username = enterPopup.querySelector("input").value.trim();
+            const username = document
+                .getElementById("enterUsername")
+                .value
+                .trim();
+
             if (!username) {
-                alert("Please enter a profile name.");
+                alert("Please enter a username.");
                 return;
             }
+
+            const profiles = getProfiles();
+
+            if (!profiles.includes(username)) {
+                alert("Profile not found. Please create a profile first.");
+                return;
+            }
+
+            // set current user and go to movies page
             localStorage.setItem("seenitUsername", username);
-            window.location.href = "mainpage2.html";  // takes user to second main page
+            window.location.href = "movies.html";
         });
     </script>
 

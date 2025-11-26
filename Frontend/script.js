@@ -1,9 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // only run this if we're on the movie page
+    // Only run this if we're on the movie page
     if (!document.body.classList.contains("movie-page")) return;
+  
+    // ----- USERNAME / PROFILE DISPLAY -----
     const storedName = localStorage.getItem("seenitUsername");
   
-    // if no username stored, force user back to main page
+    // If no username stored, force user back to main page
     if (!storedName) {
       window.location.href = "mainpage.html";
       return;
@@ -23,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   
-    // movie list logic
+    // ----- MOVIE LIST LOGIC -----
   
     const movies = [];
     let nextId = 1;
@@ -72,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
           if (text && !fullSearch.includes(text)) return false;
   
-          // letter filters
+          // LETTER FILTERS
           if (movieLetters.length) {
               const first = (m.name[0] || "").toUpperCase();
               if (!movieLetters.includes(first)) return false;
@@ -139,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   
-    // modal handling
+    // ----- MODAL HANDLING -----
     const modalBackdrop = document.getElementById("modalBackdrop");
     const movieForm = document.getElementById("movieForm");
     const modalTitle = document.getElementById("modalTitle");
@@ -227,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
       renderMovies();
     });
   
-    // search and filters
+    // Search and filters
     searchInput.addEventListener("input", renderMovies);
     document.body.addEventListener("change", (e) => {
       if (e.target.classList && e.target.classList.contains("filter-checkbox")) {
