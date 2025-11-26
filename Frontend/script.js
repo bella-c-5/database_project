@@ -1,15 +1,18 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // Only run this if we're on the movie page
+document.addEventListener("DOMContentLoaded", async () => {
+  // runs if we're on the movie page
   if (!document.body.classList.contains("movie-page")) return;
 
-  // ----- USERNAME / PROFILE DISPLAY -----
+  // user/profile display
   const storedName = localStorage.getItem("seenitUsername");
 
-  // If no username stored, force user back to main page
+  // if no username stored then force user back to main page
   if (!storedName) {
     window.location.href = "mainpage.html";
     return;
   }
+
+  const URL = `https://omdbapi.com/?s=${searchTerm}&page=1&apikey=fc1fef96`;
+  const res = await fetch(`${URL}`);
 
   const profileNameEl = document.getElementById("profileName");
   if (profileNameEl) {
@@ -19,13 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
-      // "Log out" = clear current user and go back
+      // "Log out" 
       localStorage.removeItem("seenitUsername");
       window.location.href = "mainpage.html";
     });
   }
-
-  // ----- MOVIE LIST LOGIC -----
 
   const movies = [];
   let nextId = 1;
@@ -75,54 +76,83 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("searchInput");
   const movieListEl = document.getElementById("movieList");
 
-  // ----- OMDb Autocomplete -----
   const autocompleteBox = document.getElementById("autocompleteBox");
-  let omdbTimeout = null;
 
-  // Fetch list from OMDb
-  async function fetchOMDbList(query) {
-    const key = "fc1fef96"; // your OMDb key
-    const url = `https://www.omdbapi.com/?s=${encodeURIComponent(query)}&page=1&apikey=${key}`;
-    const res = await fetch(url);
-    return res.json();
+  // fetches OMDb search from backend
+  async function fetchOmdbSearch(term) {
+    if (!term) {
+      autocompleteBox.innerHTML = "";
+      autocompleteBox.style.display = "none";
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/omdb?q=${encodeURIComponent(term)}`);
+      const data = await res.json();
+
+      if (data.Response === "True" && Array.isArray(data.Search)) {
+        renderAutocompleteList(data.Search);
+      } else {
+        autocompleteBox.innerHTML = "";
+        autocompleteBox.style.display = "none";
+      }
+    } catch (err) {
+      console.error("Error fetching OMDb search:", err);
+      autocompleteBox.innerHTML = "";
+      autocompleteBox.style.display = "none";
+    }
   }
 
-  // Fetch full movie details
-  async function fetchOMDbDetails(id) {
-    const key = "fc1fef96";
-    const url = `https://www.omdbapi.com/?i=${id}&apikey=${key}`;
-    const res = await fetch(url);
-    return res.json();
-  }
-
-  // Show results in dropdown
-  function showAutocompleteList(movies) {
+  function renderAutocompleteList(results) {
     autocompleteBox.innerHTML = "";
-    autocompleteBox.style.display = "block";
+    if (!results.length) {
+      autocompleteBox.style.display = "none";
+      return;
+    }
 
-    movies.forEach(movie => {
+    results.forEach(movie => {
       const item = document.createElement("div");
-      item.classList.add("autocomplete-item");
+      item.className = "autocomplete-item";
       item.textContent = `${movie.Title} (${movie.Year})`;
-      item.dataset.id = movie.imdbID;
-
-      item.addEventListener("click", async () => {
-        const details = await fetchOMDbDetails(movie.imdbID);
-
-        // Auto-fill modal
+      item.addEventListener("click", () => {
+        // when user clicks a suggestion, prefill the modal
         openModal({
-          name: details.Title,
-          actor: details.Actors || "",
-          director: details.Director || "",
+          name: movie.Title,
+          actor: "",      // more details like image can be added
+          director: "",
           rating: ""
         });
-
+        autocompleteBox.innerHTML = "";
         autocompleteBox.style.display = "none";
+        searchInput.value = movie.Title;
       });
-
       autocompleteBox.appendChild(item);
     });
+
+    autocompleteBox.style.display = "block";
   }
+
+  // add OMDb search to typing in the search bar
+  searchInput.addEventListener("input", () => {
+    const term = searchInput.value.trim();
+    if (term.length >= 3) {
+      fetchOmdbSearch(term);
+    } else {
+      autocompleteBox.innerHTML = "";
+      autocompleteBox.style.display = "none";
+    }
+
+    // still keep your normal local filter behavior:
+    renderMovies();
+  });
+
+  // hides dropdown when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!autocompleteBox.contains(e.target) && e.target !== searchInput) {
+      autocompleteBox.innerHTML = "";
+      autocompleteBox.style.display = "none";
+    }
+  });
 
 
   function buildLetterFilters(containerId, type) {
@@ -156,7 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const directorLetters = getSelectedLetters("director");
 
     return movies.filter((m) => {
-      // 🔎 NEW: search across movie name, actor, and director
       const fullSearch = (
         m.name + " " +
         m.actor + " " +
@@ -165,7 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (text && !fullSearch.includes(text)) return false;
 
-      // LETTER FILTERS
       if (movieLetters.length) {
         const first = (m.name[0] || "").toUpperCase();
         if (!movieLetters.includes(first)) return false;
@@ -232,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ----- MODAL HANDLING -----
+  // modal handling
   const modalBackdrop = document.getElementById("modalBackdrop");
   const movieForm = document.getElementById("movieForm");
   const modalTitle = document.getElementById("modalTitle");
@@ -322,7 +350,6 @@ document.addEventListener("DOMContentLoaded", () => {
         movie.actor = actor;
         movie.director = director;
         movie.rating = rating || null;
-        // (later you can add an UPDATE API if needed)
       }
     }
 
@@ -331,18 +358,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-  // Search and filters
+  // search and filters
   searchInput.addEventListener("input", () => {
     const query = searchInput.value.trim();
 
-    // If empty → hide box & revert to your normal search filtering
+    // if empty then hide box & revert to normal search filtering
     if (query.length < 3) {
       autocompleteBox.style.display = "none";
       renderMovies();
       return;
     }
 
-    // Delay to avoid typing spam
+    // delaying to avoid typing spam
     if (omdbTimeout) clearTimeout(omdbTimeout);
 
     omdbTimeout = setTimeout(async () => {
@@ -368,7 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!autocompleteBox.contains(e.target) && e.target !== searchInput) {
       autocompleteBox.style.display = "none";
     }
-  });  
+  });
 
   // Init filters and some starter data
   buildLetterFilters("movieLetters", "movie");

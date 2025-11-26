@@ -1,6 +1,9 @@
+require('dotenv').config();
+
 const express = require('express');
 const oracledb = require('oracledb');
 const cors = require('cors');
+const fetch = require('node-fetch');
 
 const app = express();
 app.use(express.json());
@@ -95,6 +98,31 @@ app.get('/db-test', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
+  }
+});
+
+// 🔎 OMDb proxy route: front-end calls this instead of OMDb directly
+app.get('/omdb', async (req, res) => {
+  const query = req.query.q;
+
+  if (!query) {
+    return res.status(400).json({ error: 'Missing search query "q"' });
+  }
+
+  const apiKey = process.env.OMDB_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'OMDB_API_KEY is not set on server' });
+  }
+
+  try {
+    const url = `https://www.omdbapi.com/?s=${encodeURIComponent(query)}&page=1&apikey=${apiKey}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    res.json(data); // just forward OMDb JSON to the frontend
+  } catch (err) {
+    console.error('Error in /omdb:', err);
+    res.status(500).json({ error: 'Failed to fetch from OMDb' });
   }
 });
 
