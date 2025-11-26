@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SeenIt</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
 
     <div class="container">
@@ -20,12 +22,7 @@
         <div class="popup hidden" id="createPopup">
             <div class="popup-content">
                 <h2>Create Profile</h2>
-                <input
-                    type="text"
-                    id="createUsername"
-                    placeholder="Enter username"
-                    class="create-input"
-                />
+                <input type="text" id="createUsername" placeholder="Create Profile Username" class="create-input" />
                 <button class="create-submit" id="createSubmit">Create</button>
             </div>
         </div>
@@ -34,16 +31,12 @@
         <div class="popup hidden" id="enterPopup">
             <div class="popup-content">
                 <h2>Enter Existing Profile</h2>
-                <input
-                    type="text"
-                    id="enterUsername"
-                    placeholder="Enter username"
-                    class="create-input"
-                />
+                <input type="text" id="enterUsername" placeholder="Enter Existing Profile Username"
+                    class="create-input" />
                 <button class="create-submit" id="enterSubmit">Enter</button>
             </div>
         </div>
-    </div> 
+    </div>
 
     <script>
         const createBtn = document.getElementById("createBtn");
@@ -131,4 +124,5 @@
     </script>
 
 </body>
+
 </html>
