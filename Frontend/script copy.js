@@ -28,47 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const movies = [];
     let nextId = 1;
     let editingId = null;
-    const currentUsername = localStorage.getItem("seenitUsername");
-    const API_BASE = "http://localhost:3000";
-
-    async function loadMoviesFromServer() {
-  if (!currentUsername) return;
-  try {
-    const res = await fetch(
-      `${API_BASE}/movies?username=${encodeURIComponent(currentUsername)}`
-    );
-    const data = await res.json();
-
-    movies.length = 0; 
-    data.forEach((m) => movies.push(m));
-
-    nextId = movies.reduce((max, m) => Math.max(max, m.id), 0) + 1;
-    renderMovies();
-  } catch (err) {
-    console.error("Error loading movies from server", err);
-  }
-}
-
-async function saveMovieToServer(movie) {
-  try {
-    const res = await fetch(`${API_BASE}/movies`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: currentUsername,
-        name: movie.name,
-        actor: movie.actor,
-        director: movie.director,
-        rating: movie.rating,
-      }),
-    });
-    const saved = await res.json();
-    return saved;
-  } catch (err) {
-    console.error("Error saving movie to server", err);
-    return null;
-  }
-}
 
     const searchInput = document.getElementById("searchInput");
     const movieListEl = document.getElementById("movieList");
@@ -234,50 +193,39 @@ async function saveMovieToServer(movie) {
       }
     });
   
-    movieForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const name = movieNameInput.value.trim();
-  const actor = movieActorInput.value.trim();
-  const director = movieDirectorInput.value.trim();
-  const rating = movieRatingInput.value.trim();
-
-  if (!name || !actor || !director) {
-    alert("Please fill in Movie Name, Actor, and Director.");
-    return;
-  }
-
-  if (editingId == null) {
-    const toSave = {
-      id: nextId,
-      name,
-      actor,
-      director,
-      rating: rating || null,
-    };
-
-    const saved = await saveMovieToServer(toSave);
-    if (!saved || !saved.id) {
-      alert("Could not save movie to database.");
-      return;
-    }
-
-    movies.push(saved);
-    nextId = Math.max(nextId + 1, saved.id + 1);
-  } else {
-    const movie = movies.find((m) => m.id === editingId);
-    if (movie) {
-      movie.name = name;
-      movie.actor = actor;
-      movie.director = director;
-      movie.rating = rating || null;
-      // (later you can add an UPDATE API if needed)
-    }
-  }
-
-  closeModal();
-  renderMovies();
-});
-
+    movieForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = movieNameInput.value.trim();
+      const actor = movieActorInput.value.trim();
+      const director = movieDirectorInput.value.trim();
+      const rating = movieRatingInput.value.trim();
+  
+      if (!name || !actor || !director) {
+        alert("Please fill in Movie Name, Actor, and Director.");
+        return;
+      }
+  
+      if (editingId == null) {
+        movies.push({
+          id: nextId++,
+          name,
+          actor,
+          director,
+          rating: rating || null,
+        });
+      } else {
+        const movie = movies.find((m) => m.id === editingId);
+        if (movie) {
+          movie.name = name;
+          movie.actor = actor;
+          movie.director = director;
+          movie.rating = rating || null;
+        }
+      }
+  
+      closeModal();
+      renderMovies();
+    });
   
     // search and filters
     searchInput.addEventListener("input", renderMovies);
@@ -291,6 +239,23 @@ async function saveMovieToServer(movie) {
     buildLetterFilters("movieLetters", "movie");
     buildLetterFilters("actorLetters", "actor");
     buildLetterFilters("directorLetters", "director");
-
-        loadMoviesFromServer();
+  
+    movies.push(
+      {
+        id: nextId++,
+        name: "Inception",
+        actor: "Leonardo DiCaprio",
+        director: "Christopher Nolan",
+        rating: "9.0",
+      },
+      {
+        id: nextId++,
+        name: "Barbie",
+        actor: "Margot Robbie",
+        director: "Greta Gerwig",
+        rating: "7.5",
+      }
+    );
+  
+    renderMovies();
   });
