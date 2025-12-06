@@ -80,7 +80,6 @@ body {
     transform: scale(1.05);
 }
 
-/* movie page styles */
 
 .movie-page {
     background: #111;
@@ -91,7 +90,6 @@ body {
     height: auto;
 }
 
-/* make buttons a bit smaller on movie page if you want */
 .movie-page .btn {
     padding: 8px 16px;
     font-size: 16px;
@@ -122,7 +120,6 @@ body {
     background: #000;
 }
 
-/* search row  */
 .movie-page .search-row {
     display: flex;
     align-items: center;
@@ -176,7 +173,7 @@ body {
     cursor: pointer;
 }
 
-/* movie list */
+
 .movie-page #movieList {
     list-style: none;
     padding: 0;
@@ -222,7 +219,7 @@ body {
     color: #000;
 }
 
-/* filters */
+
 .movie-page .filter-title {
     font-size: 18px;
     font-weight: bold;
@@ -344,7 +341,6 @@ body.movie-page {
     padding: 20px;
 }
 
-/* top bar on movie page - overriding to main style */
 body.movie-page .top-bar {
     display: flex;
     justify-content: space-between;
@@ -367,7 +363,6 @@ body.movie-page .profile-avatar {
     background: #000;
 }
 
-/* search row + main layout*/
 body.movie-page .search-row input[type="text"] {
     flex: 1;
     padding: 10px 12px;
@@ -386,7 +381,6 @@ body.movie-page .filter-panel {
     border-radius: 12px;
 }
 
-/* popup for add/edit movie override */
 body.movie-page .modal {
     background: #000;
     border: 2px solid #66a144;
@@ -404,16 +398,13 @@ body.movie-page .modal input {
     color: #fff;
 }
 
-/* seenit logo */
 
-/* main page big logo */
 .seenit-logo-main {
     height: 250px;
     width: 250px;
     margin-bottom: 40px;
 }
 
-/* movies page top-center logo */
 .seenit-logo {
     height: 100px;
     width: 100px;
@@ -422,4 +413,27 @@ body.movie-page .modal input {
     align-self: center;
     object-fit: contain;
     filter: drop-shadow(0 0 8px #66a144);
+}
+.autocomplete-box {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 400px;
+    background: #000;
+    border: 2px solid #66a144;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    z-index: 200;
+}
+
+.autocomplete-item {
+    padding: 10px;
+    cursor: pointer;
+    color: #fff;
+    border-bottom: 1px solid #333;
+}
+
+.autocomplete-item:hover {
+    background: #111;
 }

@@ -1,4 +1,3 @@
-// data
 const movies = [];
 let nextId = 1;
 let editingId = null;
@@ -6,7 +5,6 @@ let editingId = null;
 const searchInput = document.getElementById("searchInput");
 const movieListEl = document.getElementById("movieList");
 
-// helpers
 function buildLetterFilters(containerId, type) {
   const container = document.getElementById(containerId);
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -104,7 +102,7 @@ function renderMovies() {
   });
 }
 
-// modal handling
+
 const modalBackdrop = document.getElementById("modalBackdrop");
 const movieForm = document.getElementById("movieForm");
 const modalTitle = document.getElementById("modalTitle");
@@ -137,7 +135,7 @@ function closeModal() {
   editingId = null;
 }
 
-// --------- Event listeners ---------
+
 document.getElementById("addMovieBtn").addEventListener("click", () => {
   editingId = null;
   openModal(null);
@@ -147,7 +145,7 @@ document.getElementById("cancelModalBtn").addEventListener("click", () => {
   closeModal();
 });
 
-// Click on movie "Add Info"
+
 movieListEl.addEventListener("click", (e) => {
   if (e.target.classList.contains("edit-btn")) {
     const li = e.target.closest("li");
@@ -160,7 +158,7 @@ movieListEl.addEventListener("click", (e) => {
   }
 });
 
-// save - add or edit
+
 movieForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const name = movieNameInput.value.trim();
@@ -174,7 +172,7 @@ movieForm.addEventListener("submit", (e) => {
   }
 
   if (editingId == null) {
-    // add new
+  
     movies.push({
       id: nextId++,
       name,
@@ -183,7 +181,7 @@ movieForm.addEventListener("submit", (e) => {
       rating: rating || null,
     });
   } else {
-    // update existing
+    
     const movie = movies.find((m) => m.id === editingId);
     if (movie) {
       movie.name = name;
@@ -197,7 +195,7 @@ movieForm.addEventListener("submit", (e) => {
   renderMovies();
 });
 
-// search and filters
+
 searchInput.addEventListener("input", renderMovies);
 document.body.addEventListener("change", (e) => {
   if (e.target.classList && e.target.classList.contains("filter-checkbox")) {
@@ -205,9 +203,7 @@ document.body.addEventListener("change", (e) => {
   }
 });
 
-// placeholders for profile / logout
 document.getElementById("profileBtn").addEventListener("click", () => {
-  // replacec with real navigation
   console.log("Go to profile page");
 });
 
@@ -220,7 +216,6 @@ buildLetterFilters("movieLetters", "movie");
 buildLetterFilters("actorLetters", "actor");
 buildLetterFilters("directorLetters", "director");
 
-// optional starter data
 movies.push(
   {
     id: nextId++,

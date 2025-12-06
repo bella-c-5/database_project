@@ -16,7 +16,7 @@
             <button class="btn" id="enterBtn">Enter Existing Profile</button>
         </div>
 
-        <!-- "Create Profile" pop up -->
+        
         <div class="popup hidden" id="createPopup">
             <div class="popup-content">
                 <h2>Create Profile</h2>
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <!-- "Enter Existing Profile" pop up -->
+        
         <div class="popup hidden" id="enterPopup">
             <div class="popup-content">
                 <h2>Enter Existing Profile</h2>
@@ -43,7 +43,7 @@
                 <button class="create-submit" id="enterSubmit">Enter</button>
             </div>
         </div>
-    </div> <!-- end .container -->
+    </div> 
 
     <script>
         const createBtn = document.getElementById("createBtn");
@@ -51,7 +51,7 @@
         const createPopup = document.getElementById("createPopup");
         const enterPopup = document.getElementById("enterPopup");
 
-        // shows the correct popup
+        
         createBtn.addEventListener("click", () => {
             createPopup.classList.remove("hidden");
             enterPopup.classList.add("hidden");
@@ -62,7 +62,7 @@
             createPopup.classList.add("hidden");
         });
 
-        // these are helpers to manage profile list in localStorage
+        
         function getProfiles() {
             const raw = localStorage.getItem("seenitProfiles");
             if (!raw) return [];
@@ -80,7 +80,7 @@
         const createSubmit = document.getElementById("createSubmit");
         const enterSubmit = document.getElementById("enterSubmit");
 
-        // creating profile
+        
         createSubmit.addEventListener("click", () => {
             const username = document
                 .getElementById("createUsername")
@@ -94,18 +94,18 @@
 
             let profiles = getProfiles();
 
-            // new username = add it to the profiles list
+            
             if (!profiles.includes(username)) {
                 profiles.push(username);
                 saveProfiles(profiles);
             }
 
-            // sets current user and goes to movies page
+            
             localStorage.setItem("seenitUsername", username);
             window.location.href = "movies2.html";
         });
 
-        // enters existing profile
+       
         enterSubmit.addEventListener("click", () => {
             const username = document
                 .getElementById("enterUsername")
@@ -124,7 +124,7 @@
                 return;
             }
 
-            // Valid profile: sets current user and goes to movies page
+            
             localStorage.setItem("seenitUsername", username);
             window.location.href = "movies2.html";
         });
