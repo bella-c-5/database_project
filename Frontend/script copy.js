@@ -1,9 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // only run this if we're on the movie page
     if (!document.body.classList.contains("movie-page")) return;
     const storedName = localStorage.getItem("seenitUsername");
   
-    // if no username stored, force user back to main page
     if (!storedName) {
       window.location.href = "mainpage.html";
       return;
@@ -17,13 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const logoutBtn = document.getElementById("logoutBtn");
     if (logoutBtn) {
       logoutBtn.addEventListener("click", () => {
-        // "Log out" = clear current user and go back
         localStorage.removeItem("seenitUsername");
         window.location.href = "mainpage.html";
       });
     }
   
-    // movie list logic
   
     const movies = [];
     let nextId = 1;
@@ -63,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const directorLetters = getSelectedLetters("director");
   
       return movies.filter((m) => {
-          // 🔎 NEW: search across movie name, actor, and director
           const fullSearch = (
               m.name + " " +
               m.actor + " " +
@@ -72,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
           if (text && !fullSearch.includes(text)) return false;
   
-          // letter filters
           if (movieLetters.length) {
               const first = (m.name[0] || "").toUpperCase();
               if (!movieLetters.includes(first)) return false;
@@ -139,7 +133,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   
-    // modal handling
     const modalBackdrop = document.getElementById("modalBackdrop");
     const movieForm = document.getElementById("movieForm");
     const modalTitle = document.getElementById("modalTitle");
@@ -227,7 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
       renderMovies();
     });
   
-    // search and filters
     searchInput.addEventListener("input", renderMovies);
     document.body.addEventListener("change", (e) => {
       if (e.target.classList && e.target.classList.contains("filter-checkbox")) {
@@ -235,7 +227,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   
-    // Init filters and some starter data
     buildLetterFilters("movieLetters", "movie");
     buildLetterFilters("actorLetters", "actor");
     buildLetterFilters("directorLetters", "director");

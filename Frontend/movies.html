@@ -4,21 +4,21 @@
     <meta charset="UTF-8" />
     <title>SeenIt – Movies</title>
 
-    <!-- shared CSS file -->
+    
     <link rel="stylesheet" href="styles.css" />
 
-    <!-- movie page JavaScript -->
+    
     <script src="script.js" defer></script>
 </head>
 <body class="movie-page">
-    <!-- top bar -->
+   
     <div class="top-bar">
         <div class="top-left">
             <div class="profile-avatar"></div>
             <span class="profile-name" id="profileName"></span>
         </div>
 
-        <!-- SeenIt neon logo in the middle -->
+        
         <img src="seenit-logo.png" class="seenit-logo" alt="SeenIt logo" />
 
         <div class="top-right">
@@ -26,19 +26,15 @@
         </div>
     </div>
 
-    <!-- Search row -->
-    <div class="search-row">
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search movie, actor, director...."
-        />
-        <button class="btn" id="addMovieBtn">Add to List</button>
-    </div>
-
-    <!-- main content -->
+    
+    <div class="search-row" style="position: relative;">
+    <input type="text" id="searchInput" placeholder="Search movie, actor, director...." />
+    <button class="btn" id="addMovieBtn">Add to List</button>
+    <div id="autocompleteBox" class="autocomplete-box"></div>
+</div>
+   
     <div class="main">
-        <!-- movie list panel -->
+        
         <div class="movie-panel">
             <div class="panel-header">
                 <a>Movie Name</a>
@@ -47,7 +43,7 @@
             <ul id="movieList"></ul>
         </div>
 
-        <!-- filter panel -->
+        
         <div class="filter-panel">
             <div class="filter-title">Pick/Filter</div>
 
@@ -68,7 +64,7 @@
         </div>
     </div>
 
-    <!--  Add / Edit -->
+   
     <div class="modal-backdrop" id="modalBackdrop">
         <div class="modal">
             <h2 id="modalTitle">Add Movie</h2>
